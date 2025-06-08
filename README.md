@@ -27,9 +27,9 @@ Basic usage:
   
   *  Optional you can select show operations and select jsut a single operation from the tree.
 
-## >Download:
+## Download:
 http://winder.github.io/ugs_website/download/
-<i>Note that UGS_Fusion no longer requires the latest nightly build of UGS</i>
+<i>Note: UGS_Fusion no longer requires the latest nightly build!</i>
   
 
 ## License
@@ -37,5 +37,5 @@ Samples are licensed under the terms of the [MIT License](http://opensource.org/
 
 ## Written by
 
-Written by Patrick Rainsberry <br /> (Autodesk Fusion 360 Business Development)
+Written by Patrick Rainsberry <br /> (Autodesk Fusion 360 Business Development) <br />
 Written by Nick Rodie <br /> (Autodesk Fusion user)
