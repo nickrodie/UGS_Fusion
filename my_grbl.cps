@@ -2025,26 +2025,26 @@ function getOffsetCode() {
 // <<<<< INCLUDED FROM ../common/grbl.cps
 
 /* define variables */
+const SPINDLE_CARE_ENABLE_COMMENTS = false; // boolean: comment output file
 const SPINDLE_CARE_GROUP_NAME = "Spindle care"; // string: define group name so easy to change
 const SPINDLE_CARE_DWELL_SECONDS = 5; // integer: seconds to dwell
-const SPINDLE_CARE_WARMUP_RPM = 3000; // integer: rpm to warm up at
 const SPINDLE_CARE_WARMUP_MINUTES = 15; // integer: warm-up time in minutes
-const SPINDLE_CARE_ENABLE_COMMENTS = false; // boolean: comment output file
-
-/* properties are sorted alphabetically so create a map. Allows for easy ordering */
-const spindleCareDwell = "a_spindleCareDwell";
-const spindleCareDwellTime = "b_spindleCareDwellTime";
-const spindleCareWarmup = "c_spindleCareWarmup";
-const spindleCareWarmupRpm = "d_spindleCareeWarmupRpm";
-const spindleCareWarmupMinutes = "e_spindleCareWarmupMinutes";
-const spindleCareComments = "f_spindleCareComments";
+const SPINDLE_CARE_WARMUP_RPM = 3000; // integer: rpm to warm up at
 
 var sFormat = createFormat({ prefix: "S", decimals: 0 }); // function to format dwell code
 var lastSpindleSpeed = 0;
 
 /* define additional properties */
 var additionalProperties = {
-  a_spindleCareDwell: {
+  spindle_care_comments: {
+    title: "Include comments in output",
+    description: "Add comments in output file highlighting the dwells and or warm-up added.",
+    group: SPINDLE_CARE_GROUP_NAME,
+    type: "boolean",
+    value: false,
+    scope: "post"
+  },
+  spindle_care_dwell: {
     title: "Dwell to allow spindle to reach rpm",
     description: "Add dwell time after spindle speed change to allow spindle to match rpm.",
     group: SPINDLE_CARE_GROUP_NAME,
@@ -2052,7 +2052,7 @@ var additionalProperties = {
     value: false,
     scope: "post"
   },
-  b_spindleCareDwellTime: {
+  spindle_care_dwell_seconds: {
     title: "Dwell duration after rpm change (seconds)",
     description: "How many seconds dwell to add after rpm change to allow spindle to reach rpm.",
     group: SPINDLE_CARE_GROUP_NAME,
@@ -2060,7 +2060,7 @@ var additionalProperties = {
     value: SPINDLE_CARE_DWELL_SECONDS,
     scope: "post"
   },
-  c_spindleCareWarmup: {
+  spindle_care_warmup: {
     title: "Warm up spindle at start",
     description: "Insert a spindle warm-up routine before first spindle use.",
     group: SPINDLE_CARE_GROUP_NAME,
@@ -2068,16 +2068,7 @@ var additionalProperties = {
     value: false,
     scope: "post"
   },  
-  d_spindleCareeWarmupRpm: {
-    title: "Warm-up rpm",
-    description: "Choose a suitable low rpm to run the spindle warm-up at.",
-    group: SPINDLE_CARE_GROUP_NAME,
-    type: "angle",
-    value: SPINDLE_CARE_WARMUP_RPM,
-    scope: "post",
-    kind: "speed"
-  },
-  e_spindleCareWarmupMinutes: {
+  spindle_care_warmup_minutes: {
     title: "Warm-up duration (minutes)",
     description: "How many minutes the warmup will take. Suggest 15-20 minutes.",
     group: SPINDLE_CARE_GROUP_NAME,
@@ -2085,13 +2076,14 @@ var additionalProperties = {
     value: SPINDLE_CARE_WARMUP_MINUTES,
     scope: "post"
   },
-  f_spindleCareComments: {
-    title: "Include comments in output",
-    description: "Add comments in output file highlighting the dwells and or warm-up added.",
+  spindle_care_warmup_rpm: {
+    title: "Warm-up rpm",
+    description: "Choose a suitable low rpm to run the spindle warm-up at.",
     group: SPINDLE_CARE_GROUP_NAME,
-    type: "boolean",
-    value: false,
-    scope: "post"
+    type: "angle",
+    value: SPINDLE_CARE_WARMUP_RPM,
+    scope: "post",
+    kind: "speed"
   }
 };
 
@@ -2104,30 +2096,30 @@ startSpindle = function (tool, insertToolCall) {
 
   if (tool.type != TOOL_PROBE) {
     var msg = "";
-    if (getProperty(spindleCareWarmup) == true) {
-      setProperty(spindleCareWarmup, false);
+    if (getProperty("spindle_care_warmup") == true) {
+      setProperty("spindle_care_warmup", false);
 
-      if(getProperty(spindleCareComments)) {
+      if(getProperty("spindle_care_comments")) {
         msg = "(" + SPINDLE_CARE_GROUP_NAME + ": Warming spindle at ";
-        msg += getProperty(spindleCareWarmupRpm) + " rpm.)";
+        msg += getProperty("spindle_care_warmupRpm") + " rpm.)";
       }
-      writeBlock(sOutput.format(getProperty(spindleCareWarmupRpm)), mFormat.format(tool.clockwise ? 3 : 4), msg);
-      lastSpindleSpeed = getProperty(spindleCareWarmupRpm);
+      writeBlock(sOutput.format(getProperty("spindle_care_warmup_rpm")), mFormat.format(tool.clockwise ? 3 : 4), msg);
+      lastSpindleSpeed = getProperty("spindle_care_warmup_rpm");
 
-      if(getProperty(spindleCareComments)) {
+      if(getProperty("spindle_care_comments")) {
         msg = "(" + SPINDLE_CARE_GROUP_NAME + ": Warming spindle for ";
-        msg += getProperty(spindleCareWarmupMinutes) + " minutes.)";
+        msg += getProperty("spindle_care_warmup_minutes") + " minutes.)";
       }
-      writeBlock(gFormat.format(4), sFormat.format(getProperty(spindleCareWarmupMinutes) * 60), msg);
+      writeBlock(gFormat.format(4), sFormat.format(getProperty("spindle_care_warmup_minutes") * 60), msg);
     }
 
     startSpindleFunc(tool, insertToolCall);
-    if (getProperty(spindleCareDwell) == true && lastSpindleSpeed != spindleSpeed) { // note that spindleSpeed is a global not defined in this document
-      if(getProperty(spindleCareComments)) {
+    if (getProperty("spindle_care_dwell") == true && lastSpindleSpeed != spindleSpeed) { // note that spindleSpeed is a global not defined in this document
+      if(getProperty("spindle_care_comments")) {
         msg = "(" + SPINDLE_CARE_GROUP_NAME + ": Adding "; 
-        msg += getProperty(spindleCareDwellTime) + " second dwell for spindle to reach rpm.)";        
+        msg += getProperty("spindle_care_dwell_seconds") + " second dwell for spindle to reach rpm.)";        
       }
-      writeBlock(gFormat.format(4), sFormat.format(getProperty(spindleCareDwellTime)), msg);
+      writeBlock(gFormat.format(4), sFormat.format(getProperty("spindle_care_dwell_seconds")), msg);
       lastSpindleSpeed = spindleSpeed;
     }
   }
