@@ -1,0 +1,13 @@
+{
+	"autodeskProduct":	"Fusion",
+	"type":	"addin",
+	"author":	"Patrick Rainsberry, Nick Rodie",
+	"description":	{
+		"":	""
+	},
+	"version":	"2.0",
+	"runOnStartup":	false,
+	"supportedOS":	"windows",
+	"editEnabled":	true,
+	"iconFilename":	".//resources/UGS_Cover.png"
+}

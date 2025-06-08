@@ -1,4 +1,4 @@
-# UGS_Fusion
+# UGS_Fusion v2.0
 Fusion 360 Universal Gcode Sender Plugin
 
 Easily post Fusion 360 CAM operations to Universal Gcode Sender
@@ -10,13 +10,10 @@ First see [How to install sample Add-Ins and Scripts](https://rawgit.com/Autodes
 
 See a youtube video of using the script here: https://youtu.be/Y7n3THx3L8Q
 
-Currently this requires the latest nightly build of UGS, get it here:
-http://winder.github.io/ugs_website/download/
-
 Basic usage:
   * Run the Addin 
   
-  * Select the button in Fusion 360 CAM UI
+  * Select the button in Fusion CAM UI
   
   * Enter location of UGS on your system
   
@@ -29,6 +26,10 @@ Basic usage:
   * Select which Setup you want to post out to UGS
   
   *  Optional you can select show operations and select jsut a single operation from the tree.
+
+## >Download:
+http://winder.github.io/ugs_website/download/
+<i>Note that UGS_Fusion no longer requires the latest nightly build of UGS</i>
   
 
 ## License
@@ -37,5 +38,4 @@ Samples are licensed under the terms of the [MIT License](http://opensource.org/
 ## Written by
 
 Written by Patrick Rainsberry <br /> (Autodesk Fusion 360 Business Development)
-
-[![Analytics](https://ga-beacon.appspot.com/UA-41076924-3/UGSFusion)](https://github.com/igrigorik/ga-beacon)
+Written by Nick Rodie <br /> (Autodesk Fusion user)
